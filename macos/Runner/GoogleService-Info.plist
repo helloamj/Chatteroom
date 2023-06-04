@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCB7nzPA9kIsxzHl9xirF_agLQllbPoyis</string>
+	<key>GCM_SENDER_ID</key>
+	<string>590476997053</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.chatteroom.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>chatteroom-3d6c8</string>
+	<key>STORAGE_BUCKET</key>
+	<string>chatteroom-3d6c8.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:590476997053:ios:c40364bc84710c44e422d4</string>
+</dict>
+</plist>

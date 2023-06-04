@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590476997053",
+    "project_id": "chatteroom-3d6c8",
+    "storage_bucket": "chatteroom-3d6c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590476997053:android:6b02752bfca0edf9e422d4",
+        "android_client_info": {
+          "package_name": "com.example.chatteroom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGx0F3QNVLfqmZulFAH5YFxo4NATj-03U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
