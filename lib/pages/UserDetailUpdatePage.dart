@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:chatteroom/pages/WelcomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +9,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:provider/provider.dart';
+import 'dart:developer';
 import '../firebase/SignInUp.dart';
 import '../models/UserModel.dart';
+import '../provider/UserDetailUpdatePageProvider.dart';
 import '../ui/theme.dart';
 import 'HomePage.dart';
 
@@ -23,8 +26,6 @@ class UserDetailUpdatePage extends StatefulWidget {
 }
 
 class _UserDetailUpdatePageState extends State<UserDetailUpdatePage> {
-  File? imageFile;
-
   void selectImage(ImageSource source) async {
     XFile? pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
@@ -38,9 +39,9 @@ class _UserDetailUpdatePageState extends State<UserDetailUpdatePage> {
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         compressQuality: 20);
     if (croppedImage != null) {
-      setState(() {
-        imageFile = File(croppedImage.path);
-      });
+      context
+          .read<UserDetailUpdateProvider>()
+          .setimageFile(File(croppedImage.path));
     }
   }
 
@@ -105,11 +106,11 @@ class _UserDetailUpdatePageState extends State<UserDetailUpdatePage> {
 
   void uploadDetails() async {
     String imageURL;
-    if (imageFile != null) {
+    if (context.read<UserDetailUpdateProvider>().imageFile != null) {
       UploadTask uploadImage = FirebaseStorage.instance
           .ref('profilepictures')
-          .child(FirebaseMethods.uphoneNumber!)
-          .putFile(imageFile!);
+          .child(widget.userModel!.phonenumber!)
+          .putFile(context.read<UserDetailUpdateProvider>().imageFile!);
       TaskSnapshot snapshot = await uploadImage;
       imageURL = await snapshot.ref.getDownloadURL();
     } else
@@ -167,7 +168,7 @@ class _UserDetailUpdatePageState extends State<UserDetailUpdatePage> {
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (_) => WelcomePage()),
+                                    builder: (_) => const WelcomePage()),
                                 (route) => false);
                           });
                         },
@@ -239,16 +240,18 @@ class _UserDetailUpdatePageState extends State<UserDetailUpdatePage> {
                     onPressed: () {
                       showPhotoOptions();
                     },
-                    child: CircleAvatar(
-                      backgroundImage: (imageFile != null)
-                          ? FileImage(imageFile!)
-                          : (widget.userModel!.profilepic != null)
-                              ? NetworkImage(widget.userModel!.profilepic!)
-                                  as ImageProvider<Object>?
-                              : null,
-                      backgroundColor:
-                          Theme.of(context).primaryColor.withAlpha(200),
-                      radius: Ui.width! / 3.5,
+                    child: Consumer<UserDetailUpdateProvider>(
+                      builder: (context, value, child) => CircleAvatar(
+                        backgroundImage: (value.imageFile != null)
+                            ? FileImage(value.imageFile!)
+                            : (widget.userModel!.profilepic != null)
+                                ? NetworkImage(widget.userModel!.profilepic!)
+                                    as ImageProvider<Object>?
+                                : null,
+                        backgroundColor:
+                            Theme.of(context).primaryColor.withAlpha(200),
+                        radius: Ui.width! / 3.5,
+                      ),
                     ),
                   ),
                   const SizedBox(

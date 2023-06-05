@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/ChatRoomModel.dart';
 import '../models/UserModel.dart';
@@ -175,6 +176,85 @@ class _HomePageState extends State<HomePage> {
                                         )
                                       ]),
                                   child: ListTile(
+                                    onLongPress: () async {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                title: Text(
+                                                  'Delete Chat',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .displayLarge!
+                                                      .copyWith(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                ),
+                                                content: Text(
+                                                  'Are You Sure You Want to Delete this Chat ?',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .displaySmall!
+                                                      .copyWith(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      await FirebaseAuth
+                                                          .instance
+                                                          .signOut()
+                                                          .then((value) async {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'chatrooms')
+                                                            .doc(chatRoomModel
+                                                                .chatroomid)
+                                                            .delete()
+                                                            .then((value) {
+                                                          return Navigator.pop(
+                                                              context);
+                                                        });
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                      'Yes',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .displayMedium!
+                                                          .copyWith(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: Colors
+                                                                  .deepPurple),
+                                                    ),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      'No',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .displayMedium!
+                                                          .copyWith(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: Colors
+                                                                  .deepPurple),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ));
+                                    },
                                     onTap: () {
                                       Navigator.push(
                                         context,
@@ -197,8 +277,12 @@ class _HomePageState extends State<HomePage> {
                                     subtitle:
                                         (chatRoomModel.lastMessage.toString() !=
                                                 "")
-                                            ? Text(chatRoomModel.lastMessage
-                                                .toString())
+                                            ? Text(
+                                                chatRoomModel.lastMessage
+                                                    .toString(),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              )
                                             : Text(
                                                 "Say hi to your new friend!",
                                                 style: TextStyle(
@@ -238,4 +322,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+class UserDetailUpdatePageProvider {
 }

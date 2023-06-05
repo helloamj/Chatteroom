@@ -6,10 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 import '../models/ChatRoomModel.dart';
 import '../models/UserModel.dart';
+import '../provider/SearchPageProvider.dart';
 import '../ui/theme.dart';
 
 class SearchPage extends StatefulWidget {
@@ -80,7 +82,7 @@ class _SearchPageState extends State<SearchPage> {
                   TextField(
                     controller: searchName,
                     onChanged: (value) {
-                      setState(() {});
+                      context.read<SearchPageProvider>().setValue(value.trim());
                     },
                     decoration: InputDecoration(
                         hintText: 'Search Name...',
@@ -99,105 +101,111 @@ class _SearchPageState extends State<SearchPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  if (searchName.text.trim() != "")
-                    StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection("users")
-                          .where("fullname",
-                              isGreaterThanOrEqualTo: searchName.text,
-                              isNotEqualTo: widget.userModel.fullname)
-                          .where('fullname', isLessThan: searchName.text + 'z')
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.active) {
-                          if (snapshot.hasData) {
-                            QuerySnapshot dataSnapshot =
-                                snapshot.data as QuerySnapshot;
-                            List<QueryDocumentSnapshot> docs =
-                                dataSnapshot.docs;
+                  Consumer<SearchPageProvider>(
+                      builder: (context, value, child) {
+                    if (value.value == "") {
+                      return Text("No results found!");
+                    } else {
+                      return StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("users")
+                            .where("fullname",
+                                isGreaterThanOrEqualTo: value.value,
+                                isNotEqualTo: widget.userModel.fullname)
+                            .where('fullname', isLessThan: '${value.value}z')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.active) {
+                            if (snapshot.hasData) {
+                              QuerySnapshot dataSnapshot =
+                                  snapshot.data as QuerySnapshot;
+                              List<QueryDocumentSnapshot> docs =
+                                  dataSnapshot.docs;
 
-                            if (docs.isNotEmpty) {
-                              return SizedBox(
-                                height: Ui.height,
-                                width: Ui.width,
-                                child: ListView.builder(
-                                  itemCount: docs.length,
-                                  itemBuilder: (context, index) {
-                                    Map<String, dynamic> userMap = docs[index]
-                                        .data() as Map<String, dynamic>;
-                                    UserModel searchedUser =
-                                        UserModel.fromMap(userMap);
+                              if (docs.isNotEmpty) {
+                                return SizedBox(
+                                  height: Ui.height,
+                                  width: Ui.width,
+                                  child: ListView.builder(
+                                    itemCount: docs.length,
+                                    itemBuilder: (context, index) {
+                                      Map<String, dynamic> userMap = docs[index]
+                                          .data() as Map<String, dynamic>;
+                                      UserModel searchedUser =
+                                          UserModel.fromMap(userMap);
 
-                                    return Container(
-                                      margin: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              color: Colors.black,
-                                              blurRadius: 2,
-                                              spreadRadius: 2,
-                                              blurStyle: BlurStyle.outer,
-                                            )
-                                          ]),
-                                      width: Ui.width! / 1.1,
-                                      child: ListTile(
-                                        onTap: () async {
-                                          ChatRoomModel? chatroomModel =
-                                              await getChatRoomModel(
-                                                  searchedUser);
-                                          if (chatroomModel != null) {
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                    builder: (context) =>
-                                                        ChatRoom(
-                                                          userModel:
-                                                              widget.userModel,
-                                                          targetUser:
-                                                              searchedUser,
-                                                          firebaseUser:
-                                                              FirebaseMethods
-                                                                  .user!,
-                                                          chatroom:
-                                                              chatroomModel,
-                                                        )));
-                                          }
-                                        },
-                                        leading: CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              searchedUser.profilepic!),
-                                          backgroundColor: Colors.grey[500],
+                                      return Container(
+                                        margin: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: Colors.black,
+                                                blurRadius: 2,
+                                                spreadRadius: 2,
+                                                blurStyle: BlurStyle.outer,
+                                              )
+                                            ]),
+                                        width: Ui.width! / 1.1,
+                                        child: ListTile(
+                                          onTap: () async {
+                                            ChatRoomModel? chatroomModel =
+                                                await getChatRoomModel(
+                                                    searchedUser);
+                                            if (chatroomModel != null) {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          ChatRoom(
+                                                            userModel: widget
+                                                                .userModel,
+                                                            targetUser:
+                                                                searchedUser,
+                                                            firebaseUser:
+                                                                FirebaseMethods
+                                                                    .user!,
+                                                            chatroom:
+                                                                chatroomModel,
+                                                          )));
+                                            }
+                                          },
+                                          leading: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                searchedUser.profilepic!),
+                                            backgroundColor: Colors.grey[500],
+                                          ),
+                                          title: Text(searchedUser.fullname!),
+                                          subtitle: Text(searchedUser.bio!),
+                                          trailing:
+                                              const Icon(Icons.send_rounded),
                                         ),
-                                        title: Text(searchedUser.fullname!),
-                                        subtitle: Text(searchedUser.bio!),
-                                        trailing:
-                                            const Icon(Icons.send_rounded),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
+                                      );
+                                    },
+                                  ),
+                                );
 
-                              // return Text("No results found!");
+                                // return Text("No results found!");
+                              } else {
+                                return Text("No results found!");
+                              }
+                            } else if (snapshot.hasError) {
+                              return Text("An error occurred!");
                             } else {
                               return Text("No results found!");
                             }
-                          } else if (snapshot.hasError) {
-                            return Text("An error occurred!");
                           } else {
-                            return Text("No results found!");
+                            return CircularProgressIndicator();
                           }
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      },
-                    ),
+                        },
+                      );
+                    }
+                  }),
                 ],
               ),
             )),

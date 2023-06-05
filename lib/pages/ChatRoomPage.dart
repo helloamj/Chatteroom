@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../ui/theme.dart';
 
 class ChatRoom extends StatefulWidget {
   final UserModel targetUser;
@@ -129,34 +130,94 @@ class _ChatRoomState extends State<ChatRoom> {
                               MessageModel currentMessage =
                                   MessageModel.fromMap(datasnapshot.docs[index]
                                       .data() as Map<String, dynamic>);
-                              return Row(
-                                mainAxisAlignment: (currentMessage.sender ==
-                                        widget.userModel.phonenumber)
-                                    ? MainAxisAlignment.end
-                                    : MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      margin: EdgeInsets.symmetric(
-                                        vertical: 2,
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10,
-                                        horizontal: 10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: (currentMessage.sender ==
-                                                widget.userModel.phonenumber)
-                                            ? Theme.of(context).primaryColor
-                                            : Colors.black,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Text(
-                                        currentMessage.text.toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
+                              if (currentMessage.sender !=
+                                  widget.userModel.phonenumber) {
+                                currentMessage.seen = true;
+                                FirebaseFirestore.instance
+                                    .collection('chatrooms')
+                                    .doc(widget.chatroom.chatroomid)
+                                    .collection('messages')
+                                    .doc(currentMessage.messageid)
+                                    .update(currentMessage.toMap());
+                              }
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 2,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: (currentMessage.sender ==
+                                          widget.userModel.phonenumber)
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        constraints: BoxConstraints(
+                                            maxWidth: Ui.width! / 2),
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: 2,
                                         ),
-                                      )),
-                                ],
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 10,
+                                          horizontal: 10,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: (currentMessage.sender ==
+                                                  widget.userModel.phonenumber)
+                                              ? Theme.of(context).primaryColor
+                                              : Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Flexible(
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    maxLines: null,
+                                                    currentMessage.text
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            (currentMessage.sender ==
+                                                    widget
+                                                        .userModel.phonenumber)
+                                                ? Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      (currentMessage.seen ==
+                                                              true)
+                                                          ? Icon(
+                                                              Icons.done_all,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 15,
+                                                            )
+                                                          : Icon(
+                                                              Icons.done,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 15,
+                                                            ),
+                                                    ],
+                                                  )
+                                                : Container(),
+                                          ],
+                                        )),
+                                  ],
+                                ),
                               );
                             },
                           );
@@ -180,7 +241,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 30,
               ),
               Row(
                 children: [

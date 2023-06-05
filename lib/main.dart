@@ -8,8 +8,9 @@ import 'package:chatteroom/pages/HomePage.dart';
 // import 'package:chatteroom/pages/SignInUpPage.dart';
 import 'package:chatteroom/pages/UserDetailSetupPage.dart';
 import 'package:chatteroom/pages/WelcomePage.dart';
+import 'package:chatteroom/provider/SearchPageProvider.dart';
 // import 'package:chatteroom/pages/WelcomePage.dart';
-import 'package:chatteroom/provider/WelcomePageProvider.dart';
+import 'package:chatteroom/provider/UserDetailUpdatePageProvider.dart';
 import 'package:chatteroom/ui/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,7 @@ void main() async {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel? userModel;
   if (user != null) {
-    FirebaseMethods.user=user;
+    FirebaseMethods.user = user;
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.phoneNumber)
@@ -51,8 +52,11 @@ class MyApp extends StatelessWidget {
     Ui.setwh(context);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<WelcomePageProvider>(
-          create: (context) => WelcomePageProvider(),
+        ChangeNotifierProvider<UserDetailUpdateProvider>(
+          create: (context) => UserDetailUpdateProvider(),
+        ),
+        ChangeNotifierProvider<SearchPageProvider>(
+          create: (context) => SearchPageProvider(),
         ),
       ],
       child: MaterialApp(
@@ -71,12 +75,22 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Ui.setwh(context);
-     UserModel.mainuserModel=userModel;
-    return MaterialApp(
-      theme: Ui.getTheme(),
-      debugShowCheckedModeBanner: false,
-      home: HomePage(
-        userModel: userModel,
+    UserModel.mainuserModel = userModel;
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserDetailUpdateProvider>(
+          create: (context) => UserDetailUpdateProvider(),
+        ),
+        ChangeNotifierProvider<SearchPageProvider>(
+          create: (context) => SearchPageProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: Ui.getTheme(),
+        debugShowCheckedModeBanner: false,
+        home: HomePage(
+          userModel: userModel,
+        ),
       ),
     );
   }
