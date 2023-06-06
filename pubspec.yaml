@@ -46,6 +46,7 @@ dependencies:
   image_cropper: ^4.0.1
   uuid: ^3.0.7
   flutter_launcher_icons: ^0.13.1
+  zego_uikit_prebuilt_call: ^3.4.0
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +100,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_icons:
- image_path: "assets/icon/icon.png"
- android: true
- ios: true
+  image_path: "assets/icon/icon.png"
+  android: true
+  ios: true

@@ -5,10 +5,12 @@ import 'package:chatteroom/models/MessageModel.dart';
 import 'package:chatteroom/models/UserModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../ui/theme.dart';
+import 'VideoCallPage.dart';
 
 class ChatRoom extends StatefulWidget {
   final UserModel targetUser;
@@ -59,6 +61,72 @@ class _ChatRoomState extends State<ChatRoom> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        actions: [
+          StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('vc')
+                .doc(widget.chatroom.chatroomid)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  DocumentSnapshot datasnapshot =
+                      snapshot.data as DocumentSnapshot;
+
+                  final data = snapshot.data?.data()?['VideoCall'] ?? false;
+                  if (data == true) {
+                    return IconButton(
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('vc')
+                              .doc(widget.chatroom.chatroomid)
+                              .set({'VideoCall': true});
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (_) => VideoCallPage(
+                                      callID: widget.chatroom.chatroomid!,
+                                      user_id: widget.userModel.phonenumber!,
+                                      user_name: widget.userModel.fullname!)));
+                        },
+                        icon: const Icon(Icons.video_call,
+                            color: Colors.green, size: 30));
+                  } else {
+                    return IconButton(
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('vc')
+                              .doc(widget.chatroom.chatroomid)
+                              .set({'VideoCall': true});
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (_) => VideoCallPage(
+                                      callID: widget.chatroom.chatroomid!,
+                                      user_id: widget.userModel.phonenumber!,
+                                      user_name: widget.userModel.fullname!)));
+                        },
+                        icon: const Icon(Icons.video_call,
+                            color: Colors.black, size: 30));
+                  }
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                        "An error occured! Please check your internet connection."),
+                  );
+                } else {
+                  return Center(
+                    child: Text("Say hi to your new friend"),
+                  );
+                }
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ],
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: const Icon(
