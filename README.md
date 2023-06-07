@@ -39,9 +39,13 @@ Alternatively, you can download and install the Chatteroom app on your Android d
 
 <p align="center">
   <img src="https://github.com/helloamj/Chatteroom/assets/110400753/0666be6a-9f2c-45f0-be6c-f19d7a95fb5b" width="200"  />
-  <img src="your-screenshot-url" width="200" /> 
-  <img src="your-screenshot-url" width="200" />
-  <img src="your-screenshot-url" width="200" />
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/eb151ff6-2cb2-4e94-b0f3-cb6abeedfa59" width="200" /> 
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/c23a2276-a936-4e19-9c6b-cdc43b520f34" width="200" />
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/70e2704c-849d-442c-a934-1f7ee6455404" width="200" />
+<img src="https://github.com/helloamj/Chatteroom/assets/110400753/52afe3d5-f385-49bb-ad6d-c622af43fd88" width="200"  />
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/513671e1-e606-4776-9999-bf6d4e742af5" width="200" /> 
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/d540f9b6-7f55-41e2-842d-eabebb0a6337" width="200" />
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/21b032b8-d146-435b-8c32-bb9169414b09" width="200" />
 </p>
 
 ## Support and Contact 📧
