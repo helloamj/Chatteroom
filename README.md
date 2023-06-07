@@ -23,7 +23,7 @@ Chatteroom is a chat and video call app built using Dart and Flutter with the Pr
 
 To run Chatteroom on your local machine, you'll need to have Flutter and Dart installed. You'll also need to set up a Firebase project to provide the necessary backend services. Follow these steps to get started:
 
-1. Clone the repository: `git clone https://github.com/your-username/chatteroom.git`
+1. Clone the repository: `git clone https://github.com/helloamj/chatteroom.git`
 2. Navigate to the project directory: `cd chatteroom`
 3. Install the dependencies: `flutter pub get`
 4. Set up your Firebase project and obtain the necessary configuration files (google-services.json for Android, GoogleService-Info.plist for iOS).
@@ -55,7 +55,7 @@ Alternatively, you can download and install the Chatteroom app on your Android d
 
 ## Support and Contact 📧
 
-If you have any questions or need assistance with Chatteroom, feel free to reach out to us at [email@example.com]. Our support team is available to help you with any queries or issues you may have.
+If you have any questions or need assistance with Chatteroom, feel free to reach out to us at [jainkunal129@gmail.com]. Our support team is available to help you with any queries or issues you may have.
 
 ## Contributing 🤝
 
@@ -63,4 +63,4 @@ We welcome contributions from the community! If you'd like to contribute to Chat
 
 ## License 📜
 
-Chatteroom is licensed under the MIT License. See the [LICENSE](https://github.com/your-username/chatteroom/LICENSE) file for details.
+Chatteroom is licensed under the MIT License. See the [LICENSE](https://github.com/helloamj/chatteroom/LICENSE) file for details.
