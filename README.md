@@ -32,7 +32,7 @@ To run Chatteroom on your local machine, you'll need to have Flutter and Dart in
 
 Alternatively, you can download and install the Chatteroom app on your Android device by clicking the button below:
 
-[![Install Chatteroom](https://img.shields.io/badge/Install-Chatteroom%20App-green.svg)](https://drive.google.com/file/d/your-apk-download-link)
+[![Install Chatteroom](https://img.shields.io/badge/Install-Chatteroom%20App-green.svg)](https://drive.google.com/file/d/1ImiGbMjX51ae-2tjkUDvuLBDt7Pbybju/view?usp=drivesdk)
 
 ## Screenshots 📱
 
