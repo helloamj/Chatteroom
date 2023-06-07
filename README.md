@@ -38,7 +38,7 @@ Alternatively, you can download and install the Chatteroom app on your Android d
 
 
 <p align="center">
-  <img src="![1](https://github.com/helloamj/Chatteroom/assets/110400753/0666be6a-9f2c-45f0-be6c-f19d7a95fb5b)" width="200"  />
+  <img src="https://github.com/helloamj/Chatteroom/assets/110400753/0666be6a-9f2c-45f0-be6c-f19d7a95fb5b" width="200"  />
   <img src="your-screenshot-url" width="200" /> 
   <img src="your-screenshot-url" width="200" />
   <img src="your-screenshot-url" width="200" />
